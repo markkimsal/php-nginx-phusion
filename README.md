@@ -59,6 +59,22 @@ server {
 }
 ```
 
+Docker-compose example
+```
+services:
+  webapp:
+    tty: true
+    build:
+      context: ./
+      dockerfile: ci/dockerfile-phpfpm
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+      - ./config/container-nginx.vhost.conf:/etc/nginx/conf.d/container-vhost.conf
+```
+
+
 ##MSSQL Sqlsrv extension
 Mssql gives .deb packages for installing ODBC and sqlsrv extension on PHP.  This means you need Debian/Ubuntu instead of alpine.
 ```
