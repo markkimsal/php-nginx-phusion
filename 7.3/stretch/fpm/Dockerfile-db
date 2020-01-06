@@ -30,10 +30,11 @@ RUN apt-get update \
     && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev
 
 RUN docker-php-ext-configure gd \
-        --enable-opcache \
         --with-freetype-dir=/usr/include/freetype2 \
         --with-png-dir=/usr/include \
         --with-jpeg-dir=/usr/include
 
 RUN docker-php-ext-install gd \
     && docker-php-ext-enable gd opcache
+
+COPY opcache.ini /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
