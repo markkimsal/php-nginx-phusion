@@ -103,3 +103,9 @@ RUN ACCEPT_EULA=Y apt-get install -y \
 RUN pecl install pdo_sqlsrv sqlsrv \
     && docker-php-ext-enable pdo_sqlsrv sqlsrv
 ```
+
+
+# build custom image
+```
+docker build -t markkimsal/php-nginx-phusion:7.3-fpm-db -f 7.3/stretch/fpm/Dockerfile-db 7.3/stretch/fpm/
+```

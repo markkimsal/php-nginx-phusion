@@ -1,0 +1,39 @@
+FROM markkimsal/php-nginx-phusion:7.3-fpm
+
+RUN docker-php-ext-install mysqli pdo_mysql \
+    && docker-php-ext-enable mysqli pdo_mysql
+
+# Add Microsoft repo for Microsoft ODBC Driver 13 for Linux
+RUN apt-get update \ 
+    && apt-get install -y apt-utils gnupg curl build-essential libaio1 software-properties-common locales iputils-ping --no-install-recommends \ 
+    && apt-get install -y \ 
+    apt-transport-https \ 
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 
+    && curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \ 
+    && apt-get update
+
+# Install Dependencies
+RUN ACCEPT_EULA=Y apt-get install -y \ 
+    unixodbc \ 
+    unixodbc-dev \ 
+    libgss3 \ 
+    odbcinst \ 
+    msodbcsql17 \ 
+    locales \ 
+    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+
+# Install pdo_sqlsrv and sqlsrv from PECL. Replace pdo_sqlsrv-4.1.8preview with preferred version.
+RUN pecl install pdo_sqlsrv sqlsrv \ 
+    && docker-php-ext-enable pdo_sqlsrv sqlsrv
+
+RUN apt-get update \ 
+    && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev
+
+RUN docker-php-ext-configure gd \
+        --enable-opcache \
+        --with-freetype-dir=/usr/include/freetype2 \
+        --with-png-dir=/usr/include \
+        --with-jpeg-dir=/usr/include
+
+RUN docker-php-ext-install gd \
+    && docker-php-ext-enable gd opcache
