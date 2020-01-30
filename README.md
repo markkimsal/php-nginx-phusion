@@ -1,4 +1,7 @@
-# https://github.com/markkimsal/php-nginx-phusion
+Go use:
+# https://github.com/markkimsal/phusion-lemp
+
+instead of this project.
 
 ## https://hub.docker.com/r/markkimsal/php-nginx-phusion
 
